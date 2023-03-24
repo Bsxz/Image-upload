@@ -4,6 +4,7 @@ import styled from "styled-components";
 import {Button, message} from "antd";
 import logoUrl from '../logo192.png'
 import {observer} from "mobx-react";
+import {runInAction} from "mobx";
 import {useStore} from "../stores";
 import {Auth} from "../modules";
 
@@ -65,7 +66,7 @@ export const Header = observer(() => {
 
     useEffect(() => {
         if (Auth.getCurrentUser()) {
-            AuthStore.isLogin = true
+            runInAction(()=>AuthStore.isLogin = true)
             message.success(`登录成功`)
         }
     }, [AuthStore])

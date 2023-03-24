@@ -4,28 +4,26 @@ import {List, Spin} from 'antd'
 import InfiniteScroll from 'react-infinite-scroll-component';
 import {useStore} from '../stores'
 import styled from "styled-components";
+
 const Box = styled.div`
-      display: flex;
-      height: 80px;
-      align-items: center;
+  display: flex;
+  height: 80px;
+  align-items: center;
 
-      img {
-        height: 80px;
-      }
+  img {
+    height: 80px;
+  }
 
-      span {
-        font-size: 12px;
-        margin-left: 30px;
-      }
-    `
+  span {
+    font-size: 12px;
+    margin-left: 30px;
+  }
+`
 export default observer(() => {
     const {ListStore} = useStore()
     const loadMoreData = () => {
         if (ListStore.hasMore) {
             ListStore.find()
-            ListStore.page += 1
-        }else {
-            console.log(ListStore.list)
         }
     };
     useEffect(() => {

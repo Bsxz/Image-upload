@@ -1,4 +1,4 @@
-import {observable, action, makeObservable} from 'mobx'
+import {observable, action, makeObservable, runInAction} from 'mobx'
 import {message} from "antd";
 import {Uploader} from "../modules";
 
@@ -9,25 +9,6 @@ class ListStore {
     page = 0
     limit = 10
 
-    append(newList) {
-        this.list = this.list.concat(newList)
-    }
-
-    find() {
-        this.isLoading = true
-        Uploader.find({page: this.page, limit: this.limit})
-            .then(list => {
-                this.append(list)
-                if (list.length < (this.limit * this.page)) this.hasMore = false
-            })
-            .catch(err => {
-                message.error(`加载失败`)
-            })
-            .finally(() => {
-                this.isLoading = false
-            })
-    }
-
     constructor() {
         makeObservable(this, {
             list: observable,
@@ -36,8 +17,35 @@ class ListStore {
             page: observable,
             limit: observable,
             append: action,
-            find: action
+            find: action,
+            remove: action
         })
+    }
+
+    remove() {
+        this.list = []
+        this.page = 0
+        this.hasMore = true
+    }
+
+    append(newList) {
+        this.list = this.list.concat(newList)
+        this.page += 1
+    }
+
+    find() {
+        this.isLoading = true
+        Uploader.find({page: this.page, limit: this.limit})
+            .then(list => {
+                this.append(list)
+                if (list.length < this.limit) runInAction(() => this.hasMore = false)
+            })
+            .catch(err => {
+                message.error(`加载失败`)
+            })
+            .finally(() => {
+                runInAction(() => this.isLoading = false)
+            })
     }
 }
 

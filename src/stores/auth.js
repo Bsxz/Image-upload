@@ -1,4 +1,4 @@
-import {observable, action, makeObservable} from 'mobx'
+import {observable, action, makeObservable, runInAction} from 'mobx'
 import {Auth} from "../modules";
 import {message} from "antd";
 
@@ -42,7 +42,7 @@ class AuthStore {
         return new Promise((resolve, reject) => {
             Auth.login(this.values.username, this.values.password)
                 .then(user => {
-                    this.isLogin = true
+                    runInAction(() => this.isLogin = true)
                     resolve(user)
                 })
                 .catch(error => {
