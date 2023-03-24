@@ -22,7 +22,7 @@ a {
 }
 
 main {
-    flex: 1;
+    height: 80vh;
     padding: 30px 100px;
 }
 

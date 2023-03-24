@@ -1,9 +1,9 @@
-import React, {Suspense, lazy} from "react";
+import React, {Suspense, lazy} from "react"
+import 'antd/dist/reset.css'
 import {Routes, Route} from 'react-router-dom'
 import './App.css'
-import {Loading} from "./components/Loading";
-import {Header} from "./components/Header";
-import {Footer} from "./components/Footer";
+import {Loading} from "./components/Loading"
+import {Header} from "./components/Header"
 
 const Home = lazy(() => import('./pages/Home'))
 const History = lazy(() => import('./pages/History'))
@@ -27,7 +27,6 @@ export const App = () => {
                         </Routes>
                     </main>
                 </Suspense>
-                <Footer/>
             </div>
         </>
     );

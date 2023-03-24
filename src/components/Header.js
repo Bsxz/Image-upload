@@ -1,7 +1,11 @@
-import React from "react";
-import {NavLink} from "react-router-dom";
+import React, {useEffect} from "react";
+import {Link, NavLink} from "react-router-dom";
 import styled from "styled-components";
+import {Button, message} from "antd";
 import logoUrl from '../logo192.png'
+import {observer} from "mobx-react";
+import {useStore} from "../stores";
+import {Auth} from "../modules";
 
 const Head = styled.header`
   display: flex;
@@ -25,7 +29,7 @@ const StyledLink = styled(NavLink)`
   }
 `
 
-const Button = styled.button`
+const StyledBtn = styled(Button)`
   color: white;
   padding: 6px 16px;
   border: none;
@@ -34,6 +38,7 @@ const Button = styled.button`
   background-color: #1890ff;
 
   &:hover {
+    color: white !important;
     cursor: pointer;
     background-color: #3ba6ff;
   }
@@ -42,8 +47,29 @@ const Button = styled.button`
 const Login = styled.div`
   position: absolute;
   right: 100px;
+
+  > span {
+    color: white;
+    font-size: 12px;
+  }
 `
-export const Header = () => {
+export const Header = observer(() => {
+    const {AuthStore,ListStore} = useStore()
+    const logout = () => {
+        AuthStore.isLogin = false
+        ListStore.hasMore = true
+        ListStore.list = []
+        ListStore.page = 0
+        Auth.logout()
+    }
+
+    useEffect(() => {
+        if (Auth.getCurrentUser()) {
+            AuthStore.isLogin = true
+            message.success(`登录成功`)
+        }
+    }, [AuthStore])
+
     return (
         <Head>
             <Img src={logoUrl} alt="logo"/>
@@ -53,9 +79,18 @@ export const Header = () => {
                 <StyledLink to='/about' className={(isActive) => (isActive ? 'active' : '')}>关于</StyledLink>
             </nav>
             <Login>
-                <Button>登入</Button>
-                <Button>注册</Button>
+                {
+                    AuthStore.isLogin
+                        ? <>
+                            <span>{Auth.getCurrentUser().attributes.username}</span>
+                            <StyledBtn onClick={logout}>注销</StyledBtn>
+                        </>
+                        : <>
+                            <Link to='/login'><StyledBtn>登入</StyledBtn></Link>
+                            <Link to='/register'><StyledBtn>注册</StyledBtn></Link>
+                        </>
+                }
             </Login>
         </Head>
     )
-}
+})
