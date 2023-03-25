@@ -47,6 +47,12 @@ class ListStore {
                 runInAction(() => this.isLoading = false)
             })
     }
+
+    delete(item) {
+        this.list.splice(this.list.indexOf(item), 1)
+        Uploader.delete(item.id)
+        this.find()
+    }
 }
 
 export default ListStore

@@ -63,6 +63,10 @@ export const Uploader = {
                 })
                 .catch(err => reject(err))
         })
+    },
+    delete(id){
+        const item = AV.Object.createWithoutData('Image',id)
+        item.destroy()
     }
 
 }

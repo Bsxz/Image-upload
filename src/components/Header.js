@@ -55,18 +55,16 @@ const Login = styled.div`
   }
 `
 export const Header = observer(() => {
-    const {AuthStore,ListStore} = useStore()
+    const {AuthStore, ListStore} = useStore()
     const logout = () => {
         AuthStore.isLogin = false
-        ListStore.hasMore = true
-        ListStore.list = []
-        ListStore.page = 0
+        ListStore.remove()
         Auth.logout()
     }
 
     useEffect(() => {
         if (Auth.getCurrentUser()) {
-            runInAction(()=>AuthStore.isLogin = true)
+            runInAction(() => AuthStore.isLogin = true)
             message.success(`登录成功`)
         }
     }, [AuthStore])
