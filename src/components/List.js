@@ -20,7 +20,8 @@ const Box = styled.div`
     margin-left: 30px;
     white-space: nowrap;
     &:nth-of-type(1){
-      width: 60px;
+      width: 300px;
+      text-align: center;
     }
     &:nth-of-type(2){
       margin-left: 260px;
